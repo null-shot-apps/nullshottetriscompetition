@@ -39,7 +39,7 @@ export default function TetrisGame() {
   const [isMobile, setIsMobile] = useState(false);
 
   const gameRef = useRef({
-    board: Array(BOARD_HEIGHT).fill(null).map(() => Array(BOARD_WIDTH).fill(0)),
+    board: Array(BOARD_HEIGHT).fill(null).map(() => Array(BOARD_WIDTH).fill(0)) as (number | string)[][],
     currentPiece: null as any,
     currentX: 0,
     currentY: 0,
@@ -62,7 +62,7 @@ export default function TetrisGame() {
     };
   };
 
-  const collision = (board: number[][], piece: number[][], x: number, y: number) => {
+  const collision = (board: (number | string)[][], piece: number[][], x: number, y: number) => {
     for (let row = 0; row < piece.length; row++) {
       for (let col = 0; col < piece[row].length; col++) {
         if (piece[row][col]) {
@@ -80,7 +80,7 @@ export default function TetrisGame() {
     return false;
   };
 
-  const merge = (board: number[][], piece: number[][], x: number, y: number, color: string) => {
+  const merge = (board: (number | string)[][], piece: number[][], x: number, y: number, color: string) => {
     const newBoard = board.map(row => [...row]);
     for (let row = 0; row < piece.length; row++) {
       for (let col = 0; col < piece[row].length; col++) {
@@ -96,7 +96,7 @@ export default function TetrisGame() {
     return newBoard;
   };
 
-  const clearLines = (board: number[][]) => {
+  const clearLines = (board: (number | string)[][]) => {
     let linesCleared = 0;
     const newBoard = board.filter(row => {
       if (row.every(cell => cell !== 0)) {
@@ -283,7 +283,7 @@ export default function TetrisGame() {
 
   const startGame = () => {
     const game = gameRef.current;
-    game.board = Array(BOARD_HEIGHT).fill(null).map(() => Array(BOARD_WIDTH).fill(0));
+    game.board = Array(BOARD_HEIGHT).fill(null).map(() => Array(BOARD_WIDTH).fill(0)) as (number | string)[][];
     setGameState({ score: 0, level: 1, lines: 0, gameOver: false, paused: false });
     game.dropInterval = 1000;
     spawnPiece();
@@ -332,10 +332,12 @@ export default function TetrisGame() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState.gameOver, gameState.paused]);
 
   useEffect(() => {
     startGame();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -444,4 +446,11 @@ export default function TetrisGame() {
     </div>
   );
 }
+
+
+
+
+
+
+
 
